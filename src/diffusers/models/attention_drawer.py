@@ -18,7 +18,7 @@ def scaled_dot_product_attention(query, key, scale=None):
     """
     # Perform the dot product between query and key
     #only show the first head
-    dot_product = torch.bmm(query[:,:,:,0], key.transpose(1, 2)[:,:,:,0])
+    dot_product = torch.bmm(query[:,0,:,:], key.transpose(2, 3)[:,0,:,:])
 
     if scale is None:
         # If no scale provided, we default to the square root of the key dimension

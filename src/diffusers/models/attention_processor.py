@@ -24,6 +24,8 @@ from ..utils.torch_utils import maybe_allow_in_graph
 from .lora import LoRACompatibleLinear, LoRALinearLayer
 
 #our modified file
+from .attention_drawer import draw
+
 logger = logging.get_logger(__name__)  # pylint: disable=invalid-name
 
 
@@ -1259,7 +1261,11 @@ class AttnProcessor2_0:
         hidden_states = F.scaled_dot_product_attention(
             query, key, value, attn_mask=attention_mask, dropout_p=0.0, is_causal=False
         )
-
+        #our drawer function(only draw self-attention)
+        #print(f"query:{query.shape}")
+        #print(f"key:{key.shape}")
+        if query.shape[2] == key.shape[2]:
+          draw(query,key)
         hidden_states = hidden_states.transpose(1, 2).reshape(batch_size, -1, attn.heads * head_dim)
         hidden_states = hidden_states.to(query.dtype)
 
